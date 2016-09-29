@@ -702,3 +702,156 @@ List<PointF> points = new List<PointF>();
 			result.setRightMost(right.getRightMostPoint());
 			return result;
 			//}
+
+//merge--------------------------------------------------------
+			bool leftSideChanged = true;
+			bool rightSideChanged = true;
+			int rightMostInLeft = left.getRightMostIndex();
+			int leftUpperIndex = rightMostInLeft;
+			int rightUpperIndex = 0;
+			//get upper common tangent\
+			while (leftSideChanged || rightSideChanged) {
+				int newIndex = getLeftUpper(left, right, leftUpperIndex, rightUpperIndex);
+				if (leftUpperIndex == newIndex) {
+					leftSideChanged = false;
+				}
+				else {
+					leftUpperIndex = newIndex;
+					leftSideChanged = true;
+				}
+
+				newIndex = getRightUpper(left, right, leftUpperIndex, rightUpperIndex);
+				if (rightUpperIndex == newIndex) {
+					rightSideChanged = false;
+				}
+				else {
+					rightSideChanged = true;
+					rightUpperIndex = newIndex;
+				}
+			}
+			int leftLowerIndex = rightMostInLeft;
+			int rightLowerIndex = 0;
+
+			leftSideChanged = true;
+			rightSideChanged = true;
+
+			//get lower common tangent
+			while (leftSideChanged || rightSideChanged) {
+				int newIndex = getLeftLower(left, right, leftLowerIndex, rightLowerIndex);
+				if (newIndex == leftLowerIndex) {
+					leftSideChanged = false;
+				}
+				else {
+					leftLowerIndex = newIndex;
+					leftSideChanged = true;
+				}
+
+				newIndex = getRightLower(left, right, leftLowerIndex, rightLowerIndex);
+				if (newIndex == rightLowerIndex) {
+					rightSideChanged = false;
+				}
+				else {
+					rightSideChanged = true;
+					rightLowerIndex = newIndex;
+				}
+
+			}
+
+			List<PointF> points = join(left, right, leftUpperIndex, rightUpperIndex, leftLowerIndex, rightLowerIndex);
+			Hull result = new Hull(points);
+			return result;
+
+
+//merge--------------------------------------------------------
+Boolean foundUpperCommonTangent = false;
+
+			int leftMostInRightIndex = 0;
+			int rightMostInleftIndex = left.getRightMostIndex();
+
+			int leftUpperIndex = rightMostInleftIndex;
+			int rightUpperIndex = leftMostInRightIndex;
+
+			while(!foundUpperCommonTangent){
+				foundUpperCommonTangent = true;
+				for (int i = 0; i < left.getPoints().Count;i++){
+					if(leftUpperIndex == i){
+						continue;
+					}
+					if(isAbove(left.getPoints()[leftUpperIndex], right.getPoints()[rightUpperIndex], left.getPoints()[i]) <= 0){
+						leftUpperIndex = i;
+						foundUpperCommonTangent = false;
+					}
+				}
+
+				for (int i = 0; i < right.getPoints().Count;i++){
+					if(rightUpperIndex == i){
+						continue;
+					}
+					if(isAbove(left.getPoints()[leftUpperIndex], right.getPoints()[rightUpperIndex], right.getPoints()[i]) >= 0){
+						rightUpperIndex = i;
+						foundUpperCommonTangent = false;
+					}
+				}
+			}
+
+			int leftLowerIndex = rightMostInleftIndex;
+			int rightLowerIndex = leftMostInRightIndex;
+
+			Boolean foundLowerCommonTangent = false;
+			while(!foundLowerCommonTangent){
+				//reset flag
+				foundLowerCommonTangent = true;
+
+				for (int i = 0; i < left.getPoints().Count;i++){
+					//skip current index
+					if(leftLowerIndex == i){
+						continue;
+					}	
+					if(isAbove(left.getPoints()[leftLowerIndex], right.getPoints()[rightLowerIndex], left.getPoints()[i]) >= 0){
+						leftLowerIndex = i;
+						foundLowerCommonTangent = false;
+					}
+				}
+
+				for (int i = 0; i < right.getPoints().Count;i++){
+					if(rightLowerIndex == i){
+						continue;
+					}
+					if(isAbove(left.getPoints()[leftLowerIndex], right.getPoints()[rightLowerIndex], right.getPoints()[i]) <= 0){
+						rightLowerIndex = i;
+						foundLowerCommonTangent = false;
+					}
+				}
+			}
+
+			List<PointF> rightPoints = collectPoints(rightUpperIndex, rightLowerIndex, right.getPoints());
+			List<PointF> leftPoints = collectPoints(leftLowerIndex, leftUpperIndex, left.getPoints());
+			List<PointF> result = new List<PointF>();
+			result.AddRange(rightPoints);
+			result.AddRange(leftPoints);
+			return new Hull(result);
+		}
+
+		private double isAbove(PointF left, PointF right, PointF test){
+			double slope = calculateSlope(left, right);
+			double check = -slope * right.X + right.Y;
+			return slope * test.X + check - test.Y;
+		}
+
+		private List<PointF> collectPoints(int a, int b, List<PointF> points){
+			List<PointF> result = new List<PointF>();
+			if(a <= b){
+				for (int i = a; i <= b;i++){
+					result.Add(points[i]);
+				}
+			}
+			else{
+				for (int i = a; i < points.Count;i++){
+					result.Add(points[i]);
+				}
+				for (int i = 0; i <= b;i++){
+					result.Add(points[i]);
+				}
+			}
+			return result;
+		}

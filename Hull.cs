@@ -16,8 +16,12 @@ namespace _1_convex_hull {
 		}
 
 		public int getNextIndex(int currentIndex){
-			int newIndex = (currentIndex + 1) % points.Count;
-			return newIndex;
+			if(currentIndex == this.points.Count - 1){
+				return 0;
+			}
+			else {
+				return currentIndex + 1;
+			}
 		}
 
 		public PointF getPrev(PointF point){
@@ -36,11 +40,12 @@ namespace _1_convex_hull {
 		}
 
 		public int getPrevIndex(int currentIndex){
-			int newIndex = (currentIndex - 1) % points.Count;
-			if(newIndex < 0){
-				newIndex = ~newIndex + 1;
+			if(currentIndex == 0){
+				return this.points.Count - 1;
 			}
-			return newIndex;
+			else{
+				return currentIndex - 1;
+			}
 		}
 
 		public Hull() {
@@ -87,6 +92,16 @@ namespace _1_convex_hull {
 		}
 		public String printPointInfo(int index){
 			return "[" + points[index].X + ", " + points[index].Y + "]";
+		}
+
+		public int getLeftMostIndex(){
+			int max = 0;
+			for (int i = 0; i < points.Count; i++) {
+				if (points[i].X < points[max].X) {
+					max = i;
+				}
+			}
+			return max;
 		}
 	}
 }
