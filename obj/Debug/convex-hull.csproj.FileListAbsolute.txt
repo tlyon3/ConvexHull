@@ -1,0 +1,38 @@
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\01-convex-hull.exe
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\01-convex-hull.pdb
+C:\Users\Richard\Downloads\software\software\convex-hull\bin\Debug\01-convex-hull.exe
+C:\Users\Richard\Downloads\software\software\convex-hull\bin\Debug\01-convex-hull.pdb
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\_2_convex_hull.FormMain.resources
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\_1_convex_hull.Properties.Resources.resources
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\Richard\Downloads\software\software\convex-hull\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\01-convex-hull.exe
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\01-convex-hull.pdb
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\bin\Debug\01-convex-hull.exe
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\bin\Debug\01-convex-hull.pdb
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\_2_convex_hull.FormMain.resources
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\_1_convex_hull.Properties.Resources.resources
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\Richard\Documents\software\Convex-Hull\software\software\convex-hull\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\Richard\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\01-convex-hull.exe
+C:\Users\Richard\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\01-convex-hull.pdb
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\01-convex-hull.exe
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\01-convex-hull.pdb
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\bin\Debug\01-convex-hull.exe
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\bin\Debug\01-convex-hull.pdb
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\_2_convex_hull.FormMain.resources
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\_1_convex_hull.Properties.Resources.resources
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\Richard\Documents\Current Classes\Dropbox\CS312\Projects\convex hull\convex-hull\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\01-convex-hull.exe
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\01-convex-hull.pdb
+C:\Users\Richard\Desktop\convex hull\convex-hull\bin\Debug\01-convex-hull.exe
+C:\Users\Richard\Desktop\convex hull\convex-hull\bin\Debug\01-convex-hull.pdb
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\_2_convex_hull.FormMain.resources
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\_1_convex_hull.Properties.Resources.resources
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\Richard\Desktop\convex hull\convex-hull\obj\Debug\GenerateResource.write.1.tlog

@@ -1,0 +1,7 @@
+/Users/tlyon/Downloads/convex hull/convex-hull/obj/Release/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/Users/tlyon/Downloads/convex hull/convex-hull/obj/Release/_2_convex_hull.FormMain.resources
+/Users/tlyon/Downloads/convex hull/convex-hull/obj/Release/_1_convex_hull.Properties.Resources.resources
+/Users/tlyon/Downloads/convex hull/convex-hull/bin/Release/01-convex-hull.exe.mdb
+/Users/tlyon/Downloads/convex hull/convex-hull/bin/Release/01-convex-hull.exe
+/Users/tlyon/Downloads/convex hull/convex-hull/obj/Release/01-convex-hull.exe
+/Users/tlyon/Downloads/convex hull/convex-hull/obj/Release/01-convex-hull.exe.mdb

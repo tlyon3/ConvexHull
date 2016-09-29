@@ -1,0 +1,8 @@
+bin\Debug\01-convex-hull.exe
+bin\Debug\01-convex-hull.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\_2_convex_hull.FormMain.resources
+obj\Debug\_1_convex_hull.Properties.Resources.resources
+obj\Debug\01-convex-hull.exe
+obj\Debug\01-convex-hull.pdb
+obj\Debug\convex-hull.csproj.GenerateResource.Cache

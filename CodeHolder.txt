@@ -1,0 +1,704 @@
+﻿	getUpperCommonTangent() {
+			PointF startingLeft = getRightMostPoint(leftSide);
+			List<PointF> leftUpperPoints = getUpperPoints(leftSide, startingLeft);
+
+			PointF startingRight = getLeftMostPoint(rightSide);
+			List<PointF> rightUpperPoints = getUpperPoints(rightSide, startingRight);
+
+			List<PointF> pointsToDelete = new List<PointF>();
+
+
+			PointF currentLeft = startingLeft;
+			PointF currentRight = startingRight;
+
+			bool leftChanged = true;
+			bool rightChanged = true;
+
+			int leftIndex = getIndexForPoint(startingLeft, leftSide) - 1;
+			if (leftIndex < 0) {
+				leftIndex = leftUpperPoints.Count - 1;
+			}
+
+			int rightIndex = getIndexForPoint(startingRight, rightSide) + 1;
+			if (rightIndex >= rightUpperPoints.Count) {
+				rightIndex = 0;
+			}
+
+
+			while (leftChanged || rightChanged) {
+				int startingLeftIndex = leftIndex;
+				int startingRightIndex = rightIndex;
+				//get left point
+				while (true) {
+					if (leftSide.Count == 1) {
+						leftChanged = false;
+						break;
+					}
+					//if the slope is less, change the current and delete the previous poin
+					if (calculateSlope(leftUpperPoints[leftIndex], currentRight) < calculateSlope(currentLeft, currentRight)) {
+						pointsToDelete.Add(currentLeft);
+						currentLeft = leftSide[leftIndex];
+						leftChanged = true;
+					
+					//slope is greater. Found point. Check right side
+					else {
+						break;
+					}
+					//CHECK THIS. NOT SURE HOW TO GET COUNTER-CLOCKWIS
+					leftIndex--;
+					if (leftIndex <= 0) {
+						leftIndex = leftUpperPoints.Count - 1;
+					}
+					//checked all points. No change in tangent
+					if (leftIndex == startingLeftIndex) {
+						leftChanged = false;
+					}
+				}
+				//get right point
+				while (true) {
+					if (rightSide.Count == 1) {
+						rightChanged = false;
+						break;
+					}
+					//slope is greater. Found new point. Delete othe
+					if (calculateSlope(currentLeft, rightUpperPoints[rightIndex]) > calculateSlope(currentLeft, currentRight)) {
+						pointsToDelete.Add(currentRight);
+						currentRight = rightSide[rightIndex];
+						rightChanged = true;
+					}
+					// Slope is less. Found point. Check left agai
+					else {
+						if (rightIndex == startingRightIndex) {
+							rightChanged = false;
+						}
+						break;
+					}
+					rightIndex++;
+					if (rightIndex >= rightUpperPoints.Count) {
+						rightIndex = 0;
+					}
+					//checked all points, No change in tangent
+					if (rightIndex == startingRightIndex) {
+						rightChanged = false;
+					}
+				}
+			}
+
+			return pointsToDelete;
+		}
+
+		//CHECK THIS. I DON'T THINK THIS WILL WORK. NEED TO CHECK CASE IF RIGHTMOST POINT IS AT BOTTOM
+		//orders the points in a counter-clockwise manner starting with the rightmost point
+		private List<PointF> orderLeftPoints(List<PointF> leftSide){
+			PointF startingLeft = getRightMostPoint(leftSide);
+			List<PointF> leftPoints = getUpperPoints(leftSide, startingLeft);
+			leftPoints.Add(startingLeft);
+			leftPoints.Reverse();
+			leftPoints.AddRange(getLowerPoints(leftSide, startingLeft));
+			return leftPoints;
+		}
+
+		//CHECK THIS. I DON'T THINK THIS WILL WORK. NEED TO CHECK CASE IF LEFTMOST POINT IS AT THE BOTTOM
+		//orders the points in a clockwise manner starting with the leftmost point
+		private List<PointF> orderRightPoints(List<PointF> rightSide){
+			PointF startingRight = getLeftMostPoint(rightSide);
+			List<PointF> rightPoints = new List<PointF>();
+			rightPoints.Add(startingRight);
+			rightPoints.AddRange(getUpperPoints(rightSide, startingRight));
+			List<PointF> lowerRightPoints = getLowerPoints(rightSide, startingRight);
+			lowerRightPoints.Reverse();
+			rightPoints.AddRange(lowerRightPoints);
+			return rightPoints;
+		}
+
+
+		public List<PointF> getLowerCommonTangent(List<PointF> leftSide, List<PointF> rightSide) {
+			PointF startingLeft = getRightMostPoint(leftSide);
+			List<PointF> leftLowerPoints = getLowerPoints(leftSide, startingLeft);
+
+			PointF startingRight = getLeftMostPoint(rightSide);
+			List<PointF> rightLowerPoints = getLowerPoints(rightSide, startingRight);
+
+			List<PointF> pointsToDelete = new List<PointF>();
+
+			PointF currentLeft = startingLeft;
+			PointF currentRight = startingRight;
+
+			bool leftChanged = true;
+			bool rightChanged = true;
+
+			int leftIndex = getIndexForPoint(startingLeft, leftSide) - 1;
+			if (leftIndex < 0) {
+				leftIndex = leftLowerPoints.Count - 1;
+			}
+			int rightIndex = getIndexForPoint(startingRight, rightSide) + 1;
+			if (rightIndex >= rightLowerPoints.Count) {
+				rightIndex = 0;
+			}
+
+			while (leftChanged || rightChanged) {
+				int startingLeftIndex = leftIndex;
+				int startingRightIndex = rightIndex
+
+				//get left point
+				while (true) {
+					if (leftSide.Count == 1) {
+						leftChanged = false;
+						break;
+					}
+					//Slope is greater. Change point. Delete old one
+					if (calculateSlope(leftLowerPoints[leftIndex], currentRight) > calculateSlope(currentLeft, currentRight)) {
+						pointsToDelete.Add(currentLeft);
+						currentLeft = leftLowerPoints[leftIndex];
+						leftChanged = true;
+					}
+					//Point found. Check right side.
+					else {
+						break;
+					}
+
+					leftIndex--;
+					//wrap to front of list
+					if (leftIndex <= 0) {
+						leftIndex = leftLowerPoints.Count - 1;
+					}
+
+					//All points checked. No Change
+					if (leftIndex == startingLeftIndex) {
+						leftChanged = false;
+					}
+				}
+				//get right point
+				while (true) {
+					if (rightSide.Count == 1) {
+						rightChanged = false;
+						break;
+					}
+					//Slope is less. Change point. Delete old one
+					if (calculateSlope(currentLeft, rightLowerPoints[rightIndex]) < calculateSlope(currentLeft, currentRight)) {
+						pointsToDelete.Add(currentRight);
+						currentRight = rightLowerPoints[rightIndex];
+						rightChanged = true;
+					}
+					//Point found
+					else {
+						break;
+					}
+
+					rightIndex++;
+					if (rightIndex >= rightLowerPoints.Count) {
+						rightIndex = 0;
+					}
+
+					if (rightIndex == startingRightIndex) {
+						rightChanged = false;
+					}
+				}
+			}
+			return pointsToDelete;
+		}
+
+
+----------------------------
+UPPER TANGENT
+leftSide = orderClockwise(leftSide);
+			PointF rightMostPointInLeft = getRightMostPoint(leftSide);
+
+			rightSide = orderClockwise(rightSide);
+			PointF leftMostPointInRight = getLeftMostPoint(rightSide);
+
+			bool leftSideChanged = true;
+			bool rightSideChanged = true;
+
+			List<PointF> pointsToDelete = new List<PointF>();
+
+			int leftIndex = getIndexForPoint(rightMostPointInLeft, leftSide) - 1;
+			if(leftIndex <= 0){
+				leftIndex = leftSide.Count - 1;
+			}
+			int rightIndex = getIndexForPoint(leftMostPointInRight, rightSide) + 1;
+			if(rightIndex == rightSide.Count){
+				rightIndex = 0;
+			}
+
+			PointF currentLeft = rightMostPointInLeft;
+			PointF currentRight = leftMostPointInRight;
+
+			while(leftSideChanged || rightSideChanged){
+				PointF startingLeft = currentLeft;
+				PointF startingRight = currentRight;
+
+				leftSideChanged = false;
+				if (leftSide.Count != 1) {
+					for (int i = 0; i < leftSide.Count; i++) {
+						if (calculateSlope(leftSide[leftIndex], currentRight) > calculateSlope(currentLeft, currentRight)) {
+							leftSideChanged = true;
+							pointsToDelete.Add(currentLeft);
+							currentLeft = leftSide[leftIndex];
+						}
+						else {
+							break;
+						}
+						leftIndex--;
+						if (leftIndex <= 0) {
+							leftIndex = leftSide.Count - 1;
+						
+					}
+				}
+
+				rightSideChanged = false;
+				if (rightSide.Count != 1) {
+					for (int i = 0; i < rightSide.Count; i++) {
+						if (calculateSlope(currentLeft, rightSide[rightIndex]) < calculateSlope(currentLeft, currentRight)) {
+							rightSideChanged = true;
+							pointsToDelete.Add(currentRight);
+							currentRight = rightSide[rightIndex];
+						}
+						else {
+							break;
+						}
+						rightIndex++;
+						if (rightIndex == rightSide.Count) {
+							rightIndex = 0;
+						
+					}
+				}
+			}
+
+		
+			return pointsToDelete;
+
+			----
+			LOWER TANGENT
+			leftSide = orderClockwise(leftSide);
+			PointF rightMostPointInLeft = getRightMostPoint(leftSide);
+
+			rightSide = orderClockwise(rightSide);
+			PointF leftMostPointInRight = getLeftMostPoint(rightSide);
+
+			bool leftSideChanged = true;
+			bool rightSideChanged = true;
+
+			List<PointF> pointsToDelete = new List<PointF>();
+
+			int leftIndex = getIndexForPoint(rightMostPointInLeft, leftSide) - 1;
+			if (leftIndex <= 0) {
+				leftIndex = leftSide.Count - 1;
+			}
+			int rightIndex = getIndexForPoint(leftMostPointInRight, rightSide) + 1;
+			if (rightIndex == rightSide.Count) {
+				rightIndex = 0;
+			}
+
+			PointF currentLeft = rightMostPointInLeft;
+			PointF currentRight = leftMostPointInRight;
+
+			while (leftSideChanged || rightSideChanged) {
+				PointF startingLeft = currentLeft;
+				PointF startingRight = currentRight;
+
+				leftSideChanged = false;
+				//check left side
+				if (leftSide.Count != 1) {
+					for (int i = 0; i < leftSide.Count; i++) {
+						if (calculateSlope(leftSide[leftIndex], currentRight) < calculateSlope(currentLeft, currentRight)) {
+							leftSideChanged = true;
+							pointsToDelete.Add(currentLeft);
+							currentLeft = leftSide[leftIndex];
+						}
+						else {
+							break;
+						}
+						leftIndex++;
+						if (leftIndex == leftSide.Count) {
+							leftIndex = 0;
+						}
+					}
+				}
+				//check right sid
+				rightSideChanged = false;
+				if (rightSide.Count != 1){
+					for (int i = 0; i < rightSide.Count; i++) {
+						if (calculateSlope(currentLeft, rightSide[rightIndex]) > calculateSlope(currentLeft, currentRight)) {
+							rightSideChanged = true;
+							pointsToDelete.Add(currentRight);
+							currentRight = rightSide[rightIndex];
+						}
+						else {
+							break;
+						}
+						rightIndex--;
+						if (rightIndex <= 0) {
+							rightIndex = rightSide.Count - 1;
+						}
+					}
+				}
+			}
+			return pointsToDelete;
+
+
+
+-----------------------------------------------------
+
+
+//-------------------------------------------
+No crashes, but doesn't get all of the points
+
+	if(left.getPoints().Count == 1 && right.getPoints().Count == 1){
+				List<PointF> points = new List<PointF>();
+				points.Add(left.getPoints()[0]);
+				points.Add(right.getPoints()[0]);
+				Hull resultHull = new Hull(points);
+				resultHull.setRightMost(right.getPoints()[0]);
+				return resultHull;
+			}
+
+			PointF leftUpper = left.getRightMostPoint();
+
+			bool leftSideChanged = true;
+			bool rightSideChanged = true;
+
+			int rightMostInLeft = getIndexForPoint(leftUpper, left);
+			int leftUpperIndex = rightMostInLeft;
+			int rightUpperIndex = 0;
+
+			//get upper common tangent
+			while(leftSideChanged || rightSideChanged){
+				PointF startingLeft = left.getPoints()[leftUpperIndex];
+				PointF startingRight = right.getPoints()[rightUpperIndex];
+
+				//get left point
+				while(true){
+					Double oldSlope = calculateSlope(left.getPoints()[leftUpperIndex], right.getPoints()[rightUpperIndex]);
+					Double newSlope = calculateSlope(left.getPoints()[left.getPrevIndex(leftUpperIndex)], right.getPoints()[rightUpperIndex]);
+					if(newSlope < oldSlope){
+						leftUpperIndex = left.getPrevIndex(leftUpperIndex);
+					}
+					else {						
+						break;
+					}
+				}
+
+				if(startingLeft.Equals(left.getPoints()[leftUpperIndex])){
+					leftSideChanged = false;
+				}
+				else {
+					leftSideChanged = true;
+				}
+
+				//get right point
+				while(true){
+					Double oldSlope = calculateSlope(left.getPoints()[leftUpperIndex], right.getPoints()[rightUpperIndex]);
+					Double newSlope = calculateSlope(left.getPoints()[leftUpperIndex], right.getPoints()[right.getNextIndex(rightUpperIndex)]);
+					if(newSlope > oldSlope){
+						rightUpperIndex = right.getNextIndex(rightUpperIndex);
+					}
+					else {
+						break;
+					}
+				}
+
+				if (startingRight.Equals(right.getPoints()[rightUpperIndex])){
+					rightSideChanged = false;
+				}
+				else {
+					rightSideChanged = true;
+				}
+
+			}
+			//--------------------------------------------------------------
+			//get lower common tangent
+			leftSideChanged = true;
+			rightSideChanged = true;
+			int leftLowerIndex = rightMostInLeft;
+			int rightLowerIndex = 0;
+
+			while(leftSideChanged || rightSideChanged){
+				PointF startingLeft = left.getPoints()[leftLowerIndex];
+				PointF startingRight = right.getPoints()[rightLowerIndex];
+
+				//get left point
+				while(true){
+					Double oldSlope = calculateSlope(left.getPoints()[leftLowerIndex], right.getPoints()[rightLowerIndex]);
+					Double newSlope = calculateSlope(left.getPoints()[left.getNextIndex(leftLowerIndex)], right.getPoints()[rightLowerIndex]);
+					if(newSlope > oldSlope){
+						leftLowerIndex = left.getNextIndex(leftLowerIndex);
+					}
+					else {
+						break;
+					}
+				}
+
+				if(startingLeft.Equals(left.getPoints()[leftLowerIndex])){
+					leftSideChanged = false;
+				}
+				else {
+					leftSideChanged = true;
+				}
+
+
+				//get right point
+				while(true) {
+					Double oldSlope = calculateSlope(left.getPoints()[leftLowerIndex], right.getPoints()[rightLowerIndex]);
+					Double newSlope = calculateSlope(left.getPoints()[leftLowerIndex], right.getPoints()[right.getPrevIndex(rightLowerIndex)]);
+					if (newSlope < oldSlope) {
+						rightLowerIndex = right.getPrevIndex(rightLowerIndex);
+					}
+					else {
+						break;
+					}
+
+				}
+				if(startingRight.Equals(right.getPoints()[rightLowerIndex])){
+					rightSideChanged = false;
+				}
+				else {
+					rightSideChanged = true;
+				}
+			}
+			//------------------------------------------------------------
+			//merge
+			if (left.getPoints().Count == 1 && right.getPoints().Count != 1) {
+				List<PointF> points = new List<PointF>();
+				points.Add(left.getPoints()[0]);
+				int index = rightUpperIndex;
+				while(index != rightLowerIndex){
+					points.Add(right.getPoints()[index]);
+					index = right.getNextIndex(index);
+				}
+				Hull result = new Hull(points);
+				result.setRightMost(right.getRightMostPoint());
+				return result;
+			}
+
+			else if(left.getPoints().Count != 1 && right.getPoints().Count == 1){
+				List<PointF> points = new List<PointF>();
+				int index = 0;
+				while (index != leftUpperIndex){
+					points.Add(left.getPoints()[index]);
+					index = left.getNextIndex(index);
+				}
+				points.Add(right.getPoints()[0]);
+				while(index != 0){
+					points.Add(left.getPoints()[index]);
+					index = left.getNextIndex(index);
+				}
+
+				Hull result = new Hull(points);
+				result.setRightMost(right.getRightMostPoint());
+				return result;
+			}
+
+			else{
+				List<PointF> points = new List<PointF>();
+				int index = 0;
+				while(index != leftUpperIndex){
+					points.Add(left.getPoints()[index]);
+					index = left.getNextIndex(index);
+				}
+				index = rightUpperIndex;
+				while(index != rightLowerIndex){
+					points.Add(right.getPoints()[index]);
+					index = right.getNextIndex(index);
+				}
+
+				index = leftLowerIndex;
+				while(index != 0){
+					points.Add(left.getPoints()[index]);
+					index = left.getNextIndex(index);
+				}
+
+				Hull result = new Hull(points);
+				result.setRightMost(right.getRightMostPoint());
+				return result;
+			}
+
+------------------------------------------------------------
+crashes. Duplicate points get put in. Right most point not correct
+
+List<PointF> points = new List<PointF>();
+			PointF leftUpper = left.getRightMostPoint();
+			PointF rightUpper = right.getPoints()[0];
+
+			//if both hulls are size 1
+			if (left.getPoints().Count == 1 && right.getPoints().Count == 1) {
+				points.Add(left.getPoints()[0]);
+				points.Add(right.getPoints()[0]);
+				Hull resultHull = new Hull(points);
+				resultHull.setRightMost(right.getPoints()[0]);
+				return resultHull;
+			}
+			bool leftChanged = true;
+			bool rightChanged = true;
+
+			//get upper common tangent
+			while (leftChanged || rightChanged) {
+				PointF startingLeftPoint = leftUpper;
+				PointF startingRightPoint = rightUpper;
+				//find left point---------------
+
+				while (true) {
+					Double oldSlope = calculateSlope(leftUpper, rightUpper);
+					PointF newPoint = left.getPrev(leftUpper);
+					Double newSlope = calculateSlope(newPoint, rightUpper);
+					if (newSlope < oldSlope) {
+						leftUpper = newPoint;
+						oldSlope = newSlope;
+					}
+					else {
+						break;
+					}
+				}
+
+				if (startingLeftPoint.Equals(leftUpper)) {
+					leftChanged = false;
+				}
+				else {
+					leftChanged = true;
+				}
+
+				//find right point----------------
+				while (true) {
+					Double oldSlope = calculateSlope(leftUpper, rightUpper);
+					PointF newPoint = right.getNext(rightUpper);
+					Double newSlope = calculateSlope(leftUpper, newPoint);
+					if (newSlope > oldSlope) {
+						rightUpper = newPoint;
+						oldSlope = newSlope;
+					}
+					else {
+						break;
+					}
+				}
+
+				if (startingRightPoint.Equals(rightUpper)) {
+					rightChanged = false;
+				}
+				else {
+					rightChanged = true;
+				}
+
+			}
+
+			//get lower common tangentn-------------------------------------------------
+			PointF leftLower = left.getRightMostPoint();
+			PointF rightLower = right.getPoints()[0];
+
+			leftChanged = true;
+			rightChanged = true;
+
+			while (leftChanged || rightChanged) {
+				PointF startingLeftPoint = leftLower;
+				PointF startingRightPoint = rightLower;
+
+				//find left point-----------------
+				while (true) {
+					Double oldSlope = calculateSlope(leftLower, rightLower);
+					PointF newPoint = left.getNext(leftLower);
+					Double newSlope = calculateSlope(newPoint, rightLower);
+					if (newSlope > oldSlope) {
+						leftLower = newPoint;
+					}
+					else {
+						break;
+					}
+				}
+
+				if (startingLeftPoint.Equals(leftLower)) {
+					leftChanged = false;
+				}
+				else {
+					leftChanged = true;
+				}
+
+				//find right point ---------------
+				while (true) {
+					Double oldSlope = calculateSlope(leftLower, rightLower);
+					PointF newPoint = right.getPrev(rightLower);
+					Double newSlope = calculateSlope(leftLower, newPoint);
+					if (newSlope < oldSlope) {
+						rightLower = newPoint;
+					}
+					else {
+						break;
+					}
+				}
+
+				if (startingRightPoint.Equals(rightLower)) {
+					rightChanged = false;
+				}
+				else {
+					rightChanged = true;
+				}
+			}
+
+			//merge--------------------------------------------------------
+			List<PointF> resultPoints = new List<PointF>();
+			//now have upper and lower tangent. Merge sets
+			PointF pointToAdd = left.getPoints()[0];
+
+			////if left hull is size 1
+			//if (left.getPoints().Count == 1 && right.getPoints().Count != 1) {
+			//	resultPoints.Add(left.getPoints()[0]);
+			//	pointToAdd = rightUpper;
+			//	while (!pointToAdd.Equals(rightLower)) {
+			//		resultPoints.Add(pointToAdd);
+			//		pointToAdd = right.getNext(pointToAdd);
+			//	}
+			//	resultPoints.Add(rightLower);
+
+			//	Hull resultHull = new Hull(resultPoints);
+			//	resultHull.setRightMost(right.getRightMost());
+			//	return resultHull;
+			//}
+
+			////if right hull is size 1
+			//else if (left.getPoints().Count != 1 && right.getPoints().Count == 1) {
+			//	while (!pointToAdd.Equals(leftUpper)) {
+			//		resultPoints.Add(pointToAdd);
+			//		pointToAdd = left.getNext(pointToAdd);
+			//	}
+			//	resultPoints.Add(leftUpper);
+			//	resultPoints.Add(right.getPoints()[0]);
+
+			//	Hull resultHull = new Hull(resultPoints);
+			//	resultHull.setRightMost(right.getPoints()[0]);
+			//	return resultHull;
+			//}
+
+			//if neither are size 1
+			//else {
+			//add points to leftUppe
+			resultPoints.Add(pointToAdd);
+			while (!pointToAdd.Equals(left.getNext(leftUpper))) {
+				resultPoints.Add(pointToAdd);
+				pointToAdd = left.getNext(pointToAdd);
+			}
+				//add leftUpper
+				//resultPoints.Add(leftUpper);
+
+				//add points to right lower
+			pointToAdd = rightUpper;
+			resultPoints.Add(pointToAdd);
+			while (!pointToAdd.Equals(right.getNext(rightLower))) {
+				resultPoints.Add(pointToAdd);
+				pointToAdd = right.getNext(pointToAdd);
+			}
+
+				//add right lower
+				//resultPoints.Add(rightLower);
+
+				//add points to beginning
+			pointToAdd = leftLower;
+			while (!pointToAdd.Equals(left.getPoints()[0])) {
+				resultPoints.Add(pointToAdd);
+				pointToAdd = left.getNext(pointToAdd);
+			}
+			if(resultPoints.Count == 0){
+				Console.WriteLine("size of pionts list is 0!");
+			}
+			resultPoints = resultPoints.Distinct().ToList();
+			Hull result = new Hull(resultPoints);
+			result.setRightMost(right.getRightMostPoint());
+			return result;
+			//}
