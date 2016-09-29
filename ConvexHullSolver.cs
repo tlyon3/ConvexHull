@@ -45,7 +45,7 @@ namespace _2_convex_hull {
 		}
 
 		public Hull getHull(List<PointF> pointList, int recurLevel, String side) {
-			if (pointList.Count <= 3) {
+			if (pointList.Count <= 1) {
 				Hull result = new Hull(pointList);
 				result.setRightMost(pointList[pointList.Count - 1]);
 				return result;
@@ -57,9 +57,9 @@ namespace _2_convex_hull {
 				Hull leftHull = getHull(sets[0], recurLevel + 1, side += " left");
 				Hull rightHull = getHull(sets[1], recurLevel + 1, side += " right");
 
-				Console.WriteLine(recurLevel + " " + side);
-				Console.WriteLine("\tSize of left: " + leftHull.getPoints().Count);
-				Console.WriteLine("\tSize of right: " + rightHull.getPoints().Count);
+				//Console.WriteLine(recurLevel + " " + side);
+				//Console.WriteLine("\tSize of left: " + leftHull.getPoints().Count);
+				//Console.WriteLine("\tSize of right: " + rightHull.getPoints().Count);
 
 				return merge(leftHull, rightHull);
 			}
@@ -85,6 +85,18 @@ namespace _2_convex_hull {
 
 			//get upper common tangent
 			while(leftIndexChanged || rightIndexChanged || firstLeft || firstRight){
+				if (firstRight || leftIndexChanged) {
+					firstRight = false;
+					upperRight = getRightUpper(left, right, currentLeftIndex, currentRightIndex);
+					if (upperRight == currentRightIndex) {
+						leftIndexChanged = false;
+						rightIndexChanged = false;
+					}
+					else {
+						rightIndexChanged = true;
+						currentRightIndex = upperRight;
+					}
+				}
 				if(firstLeft || rightIndexChanged){
 					firstLeft = false;
 					upperLeft = getLeftUpper(left, right, currentLeftIndex, currentRightIndex);
@@ -95,19 +107,6 @@ namespace _2_convex_hull {
 					else {
 						leftIndexChanged = true;
 						currentLeftIndex = upperLeft;
-					}
-				}
-
-				if(firstRight || leftIndexChanged){
-					firstRight = false;
-					upperRight = getRightUpper(left, right, currentLeftIndex, currentRightIndex);
-					if(upperRight == currentRightIndex){
-						leftIndexChanged = false;
-						rightIndexChanged = false;
-					}
-					else {
-						rightIndexChanged = true;
-						currentRightIndex = upperRight;
 					}
 				}
 			}
@@ -204,45 +203,10 @@ namespace _2_convex_hull {
 			List<PointF> leftPoints = left.getPoints();
 			while(calculateSlope(leftPoints[leftIndex], rightPoints[right.getPrevIndex(rightIndex)]) < 
 			      calculateSlope(leftPoints[leftIndex], rightPoints[rightIndex])){
-				rightIndex = right.getNextIndex(rightIndex);
+				rightIndex = right.getPrevIndex(rightIndex);
 			}
 			return rightIndex;
 		}
-
-		//private List<PointF> join(Hull left, Hull right, int leftUpper, int rightUpper, int leftLower, int rightLower){
-		//	List<PointF> result = new List<PointF>();
-		//	List<PointF> leftPoints = left.getPoints();
-		//	List<PointF> rightPoints = right.getPoints();
-
-		//	Console.WriteLine("--------------------");
-		//	Console.WriteLine("Joining left(" + left.getPoints().Count + ")");
-		//	for (int i = 0; i < leftPoints.Count;i++){
-		//		Console.WriteLine("\t" + left.printPointInfo(i));
-		//	}
-		//	Console.WriteLine("With Right(" + right.getPoints().Count + ")");
-		//	for (int i = 0; i < rightPoints.Count; i++) {
-		//		Console.WriteLine("\t" + right.printPointInfo(i));
-		//	}
-		//	Console.WriteLine("Left upper: " + leftUpper + left.printPointInfo(leftUpper));
-		//	Console.WriteLine("Right upper: " + rightUpper + right.printPointInfo(rightUpper));
-		//	Console.WriteLine("Left lower: " + leftLower + left.printPointInfo(leftLower));
-		//	Console.WriteLine("Right lower: " + rightLower + right.printPointInfo(rightLower));
-
-		//	for (int i = 0; i <= leftUpper;i++){
-		//		Console.WriteLine("\tAdded: [" + leftPoints[i].X + ", " + leftPoints[i].Y + "]");
-		//		result.Add(leftPoints[i]);
-		//	}
-		//	for (int i = rightUpper; i <= rightLower;i++){
-		//		Console.WriteLine("\tAdded: [" + rightPoints[i].X + ", " + rightPoints[i].Y + "]--");
-		//		result.Add(rightPoints[i]);
-		//	}
-		//	int index = leftLower;
-		//	while(index != 0){
-		//		result.Add(leftPoints[index]);
-		//		index = left.getNextIndex(index);
-		//	}
-		//	return result;
-		//}
 
 		private int getIndexForPoint(PointF point, Hull hull){
 			List<PointF> points = hull.getPoints();
@@ -267,7 +231,7 @@ namespace _2_convex_hull {
 		}
 
 		public Double calculateSlope(PointF left, PointF right) {
-			return -((right.Y - left.Y) / (right.X - left.X));
+			return -(right.Y - left.Y) / (right.X - left.X);
 		}
 
 		private void printPointInformation(List<PointF> pointList) {
